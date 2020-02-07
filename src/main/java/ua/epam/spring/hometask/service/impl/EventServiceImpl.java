@@ -6,7 +6,10 @@ import ua.epam.spring.hometask.service.EventService;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class EventServiceImpl implements EventService {
 
@@ -41,5 +44,20 @@ public class EventServiceImpl implements EventService {
     @Override
     public Collection<Event> getAll() {
         return eventDao.getAllEvents();
+    }
+
+    @Nullable
+    public List<Event> getForDateRange(LocalDate from, LocalDate to) {
+        return getAll().stream()
+                .filter(event -> event.airsOnDates(from, to))
+                .collect(Collectors.toList());
+    }
+
+    @Nullable
+    public List<Event> getNextEvents(LocalDate to) {
+        LocalDate from = LocalDate.now();
+        return getAll().stream()
+                .filter(event -> event.airsOnDates(from, to))
+                .collect(Collectors.toList());
     }
 }
