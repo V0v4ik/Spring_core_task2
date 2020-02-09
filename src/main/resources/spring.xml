@@ -5,4 +5,14 @@
  		http://www.springframework.org/schema/beans
  		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
+    <bean id="event" class="ua.epam.spring.hometask.domain.Event" scope="prototype">
+        <constructor-arg>
+            <bean class="java.util.Date"/>
+        </constructor-arg>
+        <constructor-arg>
+            <bean class="java.text.DateFormat"
+                  factory-method="getDateTimeInstance"/>
+        </constructor-arg>
+    </bean>
+
 </beans>
