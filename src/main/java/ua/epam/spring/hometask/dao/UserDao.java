@@ -1,10 +1,12 @@
 package ua.epam.spring.hometask.dao;
 
+import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.db.UserStorage;
 import ua.epam.spring.hometask.domain.User;
 
 import java.util.Collection;
 
+@Repository
 public class UserDao {
 
     public User getUserByEmail(String email) {

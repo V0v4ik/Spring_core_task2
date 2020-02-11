@@ -1,10 +1,12 @@
 package ua.epam.spring.hometask.dao;
 
+import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.db.EventStorage;
 import ua.epam.spring.hometask.domain.Event;
 
 import java.util.Collection;
 
+@Repository
 public class EventDao {
 
     public Event getByName(String name) {

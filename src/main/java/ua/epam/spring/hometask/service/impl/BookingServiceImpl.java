@@ -1,6 +1,8 @@
 package ua.epam.spring.hometask.service.impl;
 
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ua.epam.spring.hometask.domain.*;
 import ua.epam.spring.hometask.service.BookingService;
 import ua.epam.spring.hometask.service.DiscountService;
@@ -11,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+@Service
 @Data
 public class BookingServiceImpl implements BookingService {
 
@@ -18,6 +21,7 @@ public class BookingServiceImpl implements BookingService {
 
     private double HIGH_RATED_EVENT_PRICE_MULTIPLIER = 1.2;
 
+    @Autowired
     private DiscountService discountService;
 
     @Override
@@ -30,8 +34,8 @@ public class BookingServiceImpl implements BookingService {
 
         double price = event.getRating().equals(EventRating.HIGH) ?
                 event.getBasePrice() * HIGH_RATED_EVENT_PRICE_MULTIPLIER *
-                        (numOfVipSeats * VIP_SEAT_PRICE_MULTIPLIER + seats.size() - numOfVipSeats) * (1 - discount / 100d)
-                : event.getBasePrice() * (numOfVipSeats * VIP_SEAT_PRICE_MULTIPLIER + seats.size() - numOfVipSeats) * (1 - discount / 100d);
+                        ((VIP_SEAT_PRICE_MULTIPLIER - 1) * numOfVipSeats + seats.size()) * (1 - discount / 100d)
+                : event.getBasePrice() * ((VIP_SEAT_PRICE_MULTIPLIER - 1) * numOfVipSeats + seats.size()) * (1 - discount / 100d);
 
         return price;
     }
@@ -47,7 +51,6 @@ public class BookingServiceImpl implements BookingService {
             }
             ticket.getEvent().getPurchasedTickets().get(ticket.getDateTime()).add(ticket);
         });
-
     }
 
     @Nonnull
