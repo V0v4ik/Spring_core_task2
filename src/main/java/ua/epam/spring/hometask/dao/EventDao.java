@@ -1,42 +1,8 @@
 package ua.epam.spring.hometask.dao;
 
-import org.springframework.stereotype.Repository;
-import ua.epam.spring.hometask.db.EventStorage;
 import ua.epam.spring.hometask.domain.Event;
 
-import java.util.Collection;
+public interface EventDao extends DomainObjectDao<Event> {
 
-@Repository
-public class EventDao implements DomainObjectDao<Event> {
-
-    public Event getByName(String name) {
-        return EventStorage.eventMap.values().stream()
-                .filter(event -> event.getName().equals(name))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Event with name: " + name + " doesn't exist"));
-    }
-
-    @Override
-    public Event save(Event event) {
-        EventStorage.eventMap.put(EventStorage.eventCounter++, event);
-        return getById(EventStorage.eventCounter);
-    }
-
-    @Override
-    public void remove(Event event) {
-        EventStorage.eventMap.entrySet().removeIf(entry -> entry.getValue().equals(event));
-    }
-
-    @Override
-    public Event getById(Long id) {
-        if(!EventStorage.eventMap.containsKey(id)) {
-            throw new IllegalArgumentException("Event with id: " + id + " doesn't exist");
-        }
-        return EventStorage.eventMap.get(id);
-    }
-
-    @Override
-    public Collection<Event> getAll() {
-        return EventStorage.eventMap.values();
-    }
+    Event getByName(String name);
 }
