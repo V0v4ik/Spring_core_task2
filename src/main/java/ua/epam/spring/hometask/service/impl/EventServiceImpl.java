@@ -45,7 +45,7 @@ public class EventServiceImpl implements EventService {
     @Nonnull
     @Override
     public Collection<Event> getAll() {
-        return eventDao.getAllEvents();
+        return eventDao.getAll();
     }
 
     @Nullable

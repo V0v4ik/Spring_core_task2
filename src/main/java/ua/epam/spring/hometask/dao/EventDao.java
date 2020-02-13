@@ -7,7 +7,7 @@ import ua.epam.spring.hometask.domain.Event;
 import java.util.Collection;
 
 @Repository
-public class EventDao {
+public class EventDao implements DomainObjectDao<Event> {
 
     public Event getByName(String name) {
         return EventStorage.eventMap.values().stream()
@@ -16,15 +16,18 @@ public class EventDao {
                 .orElseThrow(() -> new IllegalArgumentException("Event with name: " + name + " doesn't exist"));
     }
 
+    @Override
     public Event save(Event event) {
         EventStorage.eventMap.put(EventStorage.eventCounter++, event);
         return getById(EventStorage.eventCounter);
     }
 
+    @Override
     public void remove(Event event) {
         EventStorage.eventMap.entrySet().removeIf(entry -> entry.getValue().equals(event));
     }
 
+    @Override
     public Event getById(Long id) {
         if(!EventStorage.eventMap.containsKey(id)) {
             throw new IllegalArgumentException("Event with id: " + id + " doesn't exist");
@@ -32,7 +35,8 @@ public class EventDao {
         return EventStorage.eventMap.get(id);
     }
 
-    public Collection<Event> getAllEvents() {
+    @Override
+    public Collection<Event> getAll() {
         return EventStorage.eventMap.values();
     }
 }

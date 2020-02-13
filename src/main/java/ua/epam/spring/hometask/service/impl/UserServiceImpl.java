@@ -42,6 +42,6 @@ public class UserServiceImpl implements UserService {
     @Nonnull
     @Override
     public Collection<User> getAll() {
-        return userDao.getAllUsers();
+        return userDao.getAll();
     }
 }

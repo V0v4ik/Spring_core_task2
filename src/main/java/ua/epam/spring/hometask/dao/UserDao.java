@@ -7,7 +7,7 @@ import ua.epam.spring.hometask.domain.User;
 import java.util.Collection;
 
 @Repository
-public class UserDao {
+public class UserDao implements DomainObjectDao<User> {
 
     public User getUserByEmail(String email) {
         return UserStorage.userMap.values().stream()
@@ -16,15 +16,18 @@ public class UserDao {
                 .orElseThrow(() -> new IllegalArgumentException("User with email: " + email + " doesn't exist"));
     }
 
+    @Override
     public User save(User user) {
         UserStorage.userMap.put(UserStorage.userCounter++, user);
         return getById(UserStorage.userCounter);
     }
 
+    @Override
     public void remove(User user) {
         UserStorage.userMap.entrySet().removeIf(entry -> entry.getValue().equals(user));
     }
 
+    @Override
     public User getById(Long id) {
         if (!UserStorage.userMap.containsKey(id)) {
             throw new IllegalArgumentException("User with id: " + id + " doesn't exist");
@@ -32,7 +35,8 @@ public class UserDao {
         return UserStorage.userMap.get(id);
     }
 
-    public Collection<User> getAllUsers() {
+    @Override
+    public Collection<User> getAll() {
         return UserStorage.userMap.values();
     }
 }
