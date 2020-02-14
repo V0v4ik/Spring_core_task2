@@ -27,6 +27,8 @@ public class CounterAspect {
     private void countEventTicketsBooked() {
     }
 
+    @AfterThrowing
+
     @AfterReturning(pointcut = "countEventByNameAccess()", returning = "retVal")
     public void increaseCounter(JoinPoint joinPoint, Object retVal) {
         if (accessByNameCounter.containsKey(retVal)) {

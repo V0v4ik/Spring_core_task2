@@ -1,44 +1,63 @@
 package ua.epam.spring.hometask.dao.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.dao.UserDao;
 import ua.epam.spring.hometask.db.UserStorage;
 import ua.epam.spring.hometask.domain.User;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collection;
 
 @Repository
 public class UserDaoImpl implements UserDao {
 
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public UserDaoImpl(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
     @Override
     public User getByEmail(String email) {
-        return UserStorage.userMap.values().stream()
-                .filter(user -> user.getEmail().toLowerCase().equals(email))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("User with email: " + email + " doesn't exist"));
+        return jdbcTemplate.queryForObject("select * from users where email=?", new Object[]{email}, userRowMapper);
     }
 
     @Override
     public User save(User user) {
-        UserStorage.userMap.put(UserStorage.userCounter++, user);
-        return getById(UserStorage.userCounter);
+        jdbcTemplate.update("Insert into users(first_name, last_name, email, tickets) values (?,?,?,?)",
+                user.getFirstName(), user.getLastName(), user.getEmail(), user.getTickets().toString());
+        return user;
     }
 
     @Override
     public void remove(User user) {
-        UserStorage.userMap.entrySet().removeIf(entry -> entry.getValue().equals(user));
+        jdbcTemplate.update("Delete from users where email=?", user.getEmail());
     }
 
     @Override
     public User getById(Long id) {
-        if (!UserStorage.userMap.containsKey(id)) {
-            throw new IllegalArgumentException("User with id: " + id + " doesn't exist");
-        }
-        return UserStorage.userMap.get(id);
+        return jdbcTemplate.queryForObject("select * from users where id=?", new Object[]{id}, userRowMapper);
     }
 
     @Override
     public Collection<User> getAll() {
-        return UserStorage.userMap.values();
+        return jdbcTemplate.query("select * from users", userRowMapper);
     }
+
+    private RowMapper<User> userRowMapper = new RowMapper<User>() {
+        @Override
+        public User mapRow(ResultSet rs, int i) throws SQLException {
+            User user = new User();
+            user.setFirstName(rs.getString("first_name"));
+            user.setLastName(rs.getString("last_name"));
+            user.setEmail(rs.getString("email"));
+//            user.setTickets(new TreeSet<>(rs.getString("tickets").split(", ")));
+            return user;
+        }
+    };
 }
