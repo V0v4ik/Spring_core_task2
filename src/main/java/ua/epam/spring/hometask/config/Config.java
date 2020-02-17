@@ -1,10 +1,7 @@
 package ua.epam.spring.hometask.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
@@ -13,6 +10,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableAspectJAutoProxy
 @PropertySource("classpath:application.yml")
+@ComponentScan("ua.epam.spring.hometask")
 public class Config {
 
     @Value("${spring.datasource.driverClassName}")

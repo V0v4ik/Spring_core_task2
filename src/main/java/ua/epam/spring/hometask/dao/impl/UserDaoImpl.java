@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.dao.UserDao;
-import ua.epam.spring.hometask.db.UserStorage;
 import ua.epam.spring.hometask.domain.User;
 
 import java.sql.ResultSet;
@@ -49,15 +48,12 @@ public class UserDaoImpl implements UserDao {
         return jdbcTemplate.query("select * from users", userRowMapper);
     }
 
-    private RowMapper<User> userRowMapper = new RowMapper<User>() {
-        @Override
-        public User mapRow(ResultSet rs, int i) throws SQLException {
-            User user = new User();
-            user.setFirstName(rs.getString("first_name"));
-            user.setLastName(rs.getString("last_name"));
-            user.setEmail(rs.getString("email"));
+    private RowMapper<User> userRowMapper = (rs, i) -> {
+        User user = new User();
+        user.setFirstName(rs.getString("first_name"));
+        user.setLastName(rs.getString("last_name"));
+        user.setEmail(rs.getString("email"));
 //            user.setTickets(new TreeSet<>(rs.getString("tickets").split(", ")));
-            return user;
-        }
+        return user;
     };
 }

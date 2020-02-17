@@ -49,14 +49,11 @@ public class EventDaoImpl implements EventDao {
         return jdbcTemplate.query("Select * from events", eventRowMapper);
     }
 
-    private RowMapper<Event> eventRowMapper = new RowMapper<Event>() {
-        @Override
-        public Event mapRow(ResultSet rs, int i) throws SQLException {
-            Event event = new Event();
-            event.setName(rs.getString("name"));
-            event.setBasePrice(rs.getDouble("base_price"));
-            event.setRating(EventRating.valueOf(rs.getString("rating")));
-            return event;
-        }
+    private RowMapper<Event> eventRowMapper = (rs, i) -> {
+        Event event = new Event();
+        event.setName(rs.getString("name"));
+        event.setBasePrice(rs.getDouble("base_price"));
+        event.setRating(EventRating.valueOf(rs.getString("rating")));
+        return event;
     };
 }

@@ -15,19 +15,17 @@ public class CounterAspect {
 
     private Map<Object, Long> accessByNameCounter = new HashMap<>();
 
-    @Pointcut("execution(* ua.epam.spring.hometask.service.EventService.getByName(..)")
+    @Pointcut("execution(* ua.epam.spring.hometask.service.EventService.getByName(..))")
     private void countEventByNameAccess() {
     }
 
-    @Pointcut("execution(* ua.epam.spring.hometask.service.BookingService.getTicketsPrice(..)")
+    @Pointcut("execution(* ua.epam.spring.hometask.service.BookingService.getTicketsPrice(..))")
     private void countEventPricesQueried() {
     }
 
-    @Pointcut
+    @Pointcut("execution(* ua.epam.spring.hometask.service.BookingService.bookTickets(..))")
     private void countEventTicketsBooked() {
     }
-
-    @AfterThrowing
 
     @AfterReturning(pointcut = "countEventByNameAccess()", returning = "retVal")
     public void increaseCounter(JoinPoint joinPoint, Object retVal) {
