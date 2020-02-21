@@ -22,8 +22,6 @@ public class CounterAspect {
     @Autowired
     private EventAspectDao eventAspectDao;
 
-    private Map<Object, Long> accessByNameCounter = new HashMap<>();
-
     @Pointcut("execution(* ua.epam.spring.hometask.service.EventService.getByName(..))")
     private void countEventByNameAccess() {
     }
