@@ -7,8 +7,6 @@ import org.springframework.stereotype.Repository;
 import ua.epam.spring.hometask.dao.UserDao;
 import ua.epam.spring.hometask.domain.User;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Collection;
 
 @Repository
@@ -53,7 +51,6 @@ public class UserDaoImpl implements UserDao {
         user.setFirstName(rs.getString("first_name"));
         user.setLastName(rs.getString("last_name"));
         user.setEmail(rs.getString("email"));
-//            user.setTickets(new TreeSet<>(rs.getString("tickets").split(", ")));
         return user;
     };
 }
